@@ -28,10 +28,13 @@ public class ObstacleGenerator : MonoBehaviour
         cam = Camera.main;
     }
     
-    void Update()
+    void FixedUpdate()
     {
         if (!spawned){
+            spawned = true;
+            StartCoroutine(SpawnCooldown());
             SpawnObst();
+            
         }
     }
 
@@ -39,23 +42,26 @@ public class ObstacleGenerator : MonoBehaviour
 
     void SpawnObst()
     {
+        Debug.Log("Spawned");
+
         
-            float spawnX = 1f;  //Random.Range(rangeX.x,rangeX.y);
-            float spawnY = Random.Range(rangeY.x,rangeY.y);
+        float spawnX = 1f;  //Random.Range(rangeX.x,rangeX.y);
+        float spawnY = Random.Range(rangeY.x,rangeY.y);
 
-            Vector3 normSpawnPos = new Vector3(spawnX,spawnY,0f);
+        Vector3 normSpawnPos = new Vector3(spawnX,spawnY,0f);
 
-            Vector3 spawnPos = cam.ViewportToWorldPoint(normSpawnPos);
+        Vector3 spawnPos = cam.ViewportToWorldPoint(normSpawnPos);
 
 
-            GameObject spawnedObst = Instantiate(obstacle,spawnPos,Quaternion.identity);
+        GameObject spawnedObst = Instantiate(obstacle,spawnPos,Quaternion.identity);
 
-            spawnedObst.transform.parent = this.gameObject.transform;
-            spawnedObst.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-            spawnedObst.GetComponent<Rigidbody2D>().velocity = new Vector2(obstacleSpeed, 0f);
-            Destroy(spawnedObst, obstacleLifeTime);
-            spawned = true;
-            StartCoroutine(SpawnCooldown());
+        spawnedObst.transform.parent = this.gameObject.transform;
+        spawnedObst.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+        spawnedObst.GetComponent<Rigidbody2D>().velocity = new Vector2(obstacleSpeed, 0f);
+        Destroy(spawnedObst, obstacleLifeTime);
+        
+            
+            
 
     }
 
